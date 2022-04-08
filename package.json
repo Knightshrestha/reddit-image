@@ -1,14 +1,23 @@
 {
-	"name": "reddit-image",
-	"version": "1.0.0",
-	"description": "A code to extract image url title and other stuff frem reddit",
-	"main": "index'.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"author": "Knight Shrestha",
-	"license": "ISC",
-	"dependencies": {
-		"axios": "^0.26.1"
-	}
+  "name": "reddit-image",
+  "version": "1.0.0",
+  "description": "A code to extract image url title and other stuff frem reddit",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Knight Shrestha",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Knightshrestha/reddit-image.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Knightshrestha/reddit-image/issues"
+  },
+  "homepage": "https://github.com/Knightshrestha/reddit-image#readme"
 }
