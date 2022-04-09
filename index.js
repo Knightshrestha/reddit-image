@@ -1,24 +1,100 @@
-const axios = require('axios');
+const axios = require('axios').default;
 
-async function ImageExtractor(subreddit, limit) {
-	let url = 'https://api.reddit.com/r/AnimeWallpaperSFW/hot?limit=10';
+const getPosts = async ({subreddit = 'AnimeWallpapersSFW', limit = 3, flair = 'Mobile'}) => {
+	const options = {
+		method: 'GET',
+		url: `https://api.reddit.com/r/${subreddit}/hot`,
+		params: { limit: limit},
+	};
 
-	const response = await axios.get(url).then((res) => res.data);
+  const array = [];
+  
+  var afterQ;
 
-	const { data } = response;
-	const { children } = data;
+	await axios
+		.request(options)
+		.then(function (response) {
+			const { data } = response.data;
+      const { children, after } = data;
+      
+    afterQ = after
 
-	children.map((child) => {
-		const { data: info } = child;
-		const { link_flair_text: type, title, subreddit, url } = info;
-		console.log('type', type + ' ' + url + ' ' + title);
-	});
+			children.map((res) => {
+				const { data } = res;
+				const {
+					author,
+					url,
+					subreddit: source,
+					link_flair_text: type,
+				} = data;
 
-}
+        if (type === flair) {
+          array.push({
+				author,
+				url,
+				source,
+				type,
+			});
+				}
+			});
 
-ImageExtractor()
+			
+		})
+		.catch(function (error) {
+			console.error(error);
+    });
+  
+  if (array.length < limit) {
+    console.log('test')
+
+  await axios
+		.request({
+			method: 'GET',
+			url: `https://api.reddit.com/r/${subreddit}/hot`,
+      params: {
+        limit: 10,
+        after: afterQ
+      },
+		})
+		.then(function (response) {
+			const { data } = response.data;
+      const { children, after } = data;
+      
+      afterQ = after
+
+      for (let i = 0; i < children.length; i++) {
+        const element = children[i];
+        const { data } = element
+        const {
+          author,
+          url,
+          subreddit: source,
+          link_flair_text: type,
+        } = data;
+
+        if (type === flair) {
+          array.push({
+            author,
+            url,
+            source,
+            type,
+          })
+        }
+
+        if (array.length == limit) {
+          break
+        }
+      }   
+		})
+		.catch(function (error) {
+			console.error(error);
+    });
+  }
+
+	return array;
+};
 
 
 module.exports = {
-	ImageExtractor
-};
+  GetPosts: getPosts
+}
